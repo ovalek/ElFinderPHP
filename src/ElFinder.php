@@ -344,7 +344,7 @@ class ElFinder {
             foreach ($opts['bind'] as $cmd => $handlers) {
                 $doRegist = (strpos($cmd, '*') !== false);
                 if (! $doRegist) {
-                    $_getcmd = create_function('$cmd', 'list($ret) = explode(\'.\', $cmd);return trim($ret);');
+                    $_getcmd = function($cmd) { list($ret) = explode('.', $cmd);return trim($ret); };
                     $doRegist = ($_reqCmd && in_array($_reqCmd, array_map($_getcmd, explode(' ', $cmd))));
                 }
                 if ($doRegist) {
@@ -453,7 +453,7 @@ class ElFinder {
                     list(, $sub) = array_pad(explode('.', $_cmd), 2, '');
                     if ($sub) {
                         $sub = str_replace('\'', '\\\'', $sub);
-                        $addSub = create_function('$cmd', 'return $cmd . \'.\' . trim(\'' . $sub . '\');');
+                        $addSub = function($cmd) use ($sub) { return $cmd . '.' . trim('' . $sub . ''); };
                         $cmds = array_merge($cmds, array_map($addSub, $allCmds));
                     } else {
                         $cmds = array_merge($cmds, $allCmds);
@@ -1048,7 +1048,7 @@ class ElFinder {
             if (($volume = $this->volume($targets[0])) !== false) {
                 if ($dlres = $volume->zipdl($targets)) {
                     $path = $dlres['path'];
-                    register_shutdown_function(create_function('$f', 'connection_status() && is_file($f) && @unlink($f);'), $path);
+                    register_shutdown_function(function($f) { connection_status() && is_file($f) && @unlink($f); }, $path);
                     if (count($targets) === 1) {
                         $name = basename($volume->path($targets[0]));
                     } else {
@@ -1074,7 +1074,7 @@ class ElFinder {
             }
             $file = $targets[1];
             $path = $volume->getTempPath().DIRECTORY_SEPARATOR.$file;
-            register_shutdown_function(create_function('$f', 'is_file($f) && @unlink($f);'), $path);
+            register_shutdown_function(function($f) { is_file($f) && @unlink($f); }, $path);
             if (!is_readable($path)) {
                 return array('error' => 'File not found', 'header' => $h404, 'raw' => true);
             }
@@ -1860,11 +1860,11 @@ class ElFinder {
 // 				}
 // 			};
 // 		} else {
-        $shutdownfunc = create_function('', '
-				foreach(array_keys($GLOBALS[\'ElFinderTempFiles\']) as $f){
+        $shutdownfunc = function () {
+				foreach(array_keys($GLOBALS['ElFinderTempFiles']) as $f){
 					@unlink($f);
 				}
-			');
+			};
 //		}
         register_shutdown_function($shutdownfunc);
 
