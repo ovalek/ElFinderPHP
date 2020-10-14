@@ -1,8 +1,8 @@
 {
-    "name": "helios-ag/fm-elfinder-php-connector",
-    "description": "ElFinder PHP backend, 5.4 compliant",
+    "name": "ovalek/fm-elfinder-php-connector",
+    "description": "ElFinder PHP backend, 7.4 compliant",
     "keywords": ["elfinder", "filemanager"],
-    "homepage": "http://github.com/helios-ag/ElFinderPHP",
+    "homepage": "https://github.com/ovalek/ElFinderPHP",
     "type": "library",
     "license": "BSD-3-Clause",
     "authors": [
@@ -17,6 +17,10 @@
         {
             "name": "Symfony Community",
             "homepage": "https://github.com/helios-ag/ElFinderPHP/contributors"
+        },
+        {
+            "name": "ovalek",
+            "homepage": "https://github.com/ovalek"
         }
     ],
     "require": {
